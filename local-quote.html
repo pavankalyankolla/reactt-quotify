@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quotify</title>
+    <script src="/react/js/babel.js"></script>
+    <script src="/react/js/react.development.js"></script>
+    <script src= "/react/js/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="text/babel">
+        const appHandle = document.getElementById('app');
+
+        function Heading(props){
+            return <h1>{props.title}</h1>
+        }
+
+        class Quotes extends React.Component {
+            constructor(props){
+                super(props);
+                this.state = {
+                    quotes : {},
+                    warning : ''
+                }
+                this.getData = this.getData.bind(this)
+                this.getQuote = this.getQuote.bind(this)
+            }
+
+        componentDidMount() {
+            this.getData();
+        }
+        getData(){
+           let data = JSON.parse(localStorage.getItem("array"));
+        //    console.log(data);
+        if(!data){
+            this.setState({
+                warning : 'local storage is empty'
+            })
+        } else {
+            this.setState({
+               quotes : data[Math.floor(Math.random() * data.length)]
+           }) 
+        }       
+    }
+        getQuote(){
+            this.getData();
+    }
+
+        render(){
+            return (
+                <div>
+                    <p> <a href = "./index.html">Random Quote(API)</a> | <a href = "#">Random Quote(local)</a></p>
+                    <h2> {this.state.warning} </h2>
+                    <h2>{this.state.quotes.quote} </h2>
+                    <h4> {this.state.quotes.author} </h4>
+                    <button onClick={this.getQuote}>Get another quote</button>
+                </div>
+            )
+        }
+    }
+
+       function App(){
+            return (
+               <div>
+                    <Heading title="Quotify" />
+                    <Quotes />
+                </div>
+            )
+       }
+
+       ReactDOM.render(<App />,appHandle);
+    </script>
+</body>
+</html>
